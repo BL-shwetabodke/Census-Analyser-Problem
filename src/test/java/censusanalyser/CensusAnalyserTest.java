@@ -19,6 +19,7 @@ public class CensusAnalyserTest {
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
