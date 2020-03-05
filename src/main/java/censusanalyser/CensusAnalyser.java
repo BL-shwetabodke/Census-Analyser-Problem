@@ -8,11 +8,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CensusAnalyser {
+    public enum Country {INDIA, US}
     Map<String, CensusDTO> censusMap;
     List<CensusDTO> censusDTOList;
 
-    public int loadIndiaCensusData(String ...csvFilePath) throws CensusAnalyserException {
-        censusMap = new CensusLoader().loadCensusData(IndiaCensusCSV.class, csvFilePath);
+    public int loadCensusData(Country country ,String... csvFilePath) throws CensusAnalyserException {
+        censusMap = new CensusLoader().loadCensusData(country, csvFilePath);
         censusDTOList = censusMap.values().stream().collect(Collectors.toList());
         return censusMap.size();
 
@@ -37,21 +38,21 @@ public class CensusAnalyser {
 //    }
 
     public String getStateWiseSortedCensusData(String csvFilePath) {
-        if(censusMap == null || censusMap.size()==0) {
+        if (censusMap == null || censusMap.size() == 0) {
             throw new CensusAnalyserException("No Census Data",
                     CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
 
-        Comparator<CensusDTO> censusComparator =Comparator.comparing(census -> census.state);
-        censusDTOList =censusMap.values().stream().collect(Collectors.toList());
+        Comparator<CensusDTO> censusComparator = Comparator.comparing(census -> census.state);
+        censusDTOList = censusMap.values().stream().collect(Collectors.toList());
         this.sort(censusComparator);
-        String sortedStateCensusJson=new Gson().toJson(censusDTOList);
+        String sortedStateCensusJson = new Gson().toJson(censusDTOList);
         return sortedStateCensusJson;
     }
 
-    public int loadUsCensusData(String csvFilePath) {
-        return new CensusLoader().loadCensusData(UsCensusCSV.class, csvFilePath).size();
-    }
+//    public int loadUsCensusData(String csvFilePath) {
+//        return new CensusLoader().loadCensusData(UsCensusCSV.class, csvFilePath).size();
+//    }
 
     private void sort(Comparator<CensusDTO> censusCSVComparator) {
 
